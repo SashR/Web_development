@@ -14,9 +14,9 @@ function active(img) {
   for (let i = 0; i < 6; i++) {
     let elm = document.getElementById(`ih${i}`);
     if (i == img) {
-      elm.setAttribute("class", "img-holder-active");
+      elm.setAttribute("class", "image-holder-active");
     } else {
-      elm.setAttribute("class", "img-holder");
+      elm.setAttribute("class", "image-holder");
     }
   }
 }

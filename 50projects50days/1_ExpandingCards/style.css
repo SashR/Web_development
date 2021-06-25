@@ -13,9 +13,9 @@ body {
   justify-content: space-evenly;
 }
 
-.img-holder {
+.image-holder {
   height: 80vh;
-  width: 15%;
+  width: 10%;
 }
 
 .image {
@@ -23,18 +23,10 @@ body {
   height: 80vh;
   transition: 2s ease-in-out;
   border: 1px solid black;
-  border-radius: 40%;
-}
-
-.br-active {
-  border-radius: 20%;
+  border-radius: 25px;
 }
 
 .image-holder-active {
+  height: 80vh;
   width: 40%;
-}
-
-.image-holder-disabled {
-  width: 10%;
-  border-radius: 50%;
 }
