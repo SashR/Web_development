@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Models\Posts;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +16,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Blog Posts 
-// Route::get('/posts')
+Route::get('/posts', function() {
+    $post = Posts::create([
+        'title' => 'my first post', 
+        'slug' => 'my-first-post']);
+    return $post;
+});
 
 // CRUD
 /* 

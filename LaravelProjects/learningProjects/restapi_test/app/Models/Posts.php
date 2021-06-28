@@ -14,5 +14,5 @@ class Posts extends Model
         'slug',
         'likes',
         'content'
-    ]
-}
+    ];
+};
