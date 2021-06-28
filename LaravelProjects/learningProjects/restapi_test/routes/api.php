@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Posts;
@@ -16,12 +17,35 @@ use App\Models\Posts;
 */
 
 // Blog Posts 
-Route::get('/posts', function() {
-    $post = Posts::create([
-        'title' => 'my first post', 
-        'slug' => 'my-first-post']);
-    return $post;
-});
+// Route::get('/posts', function() {
+//     $post = Posts::create([
+//         'title' => 'my first post', 
+//         'slug' => 'my-first-post']);
+//     return $post;
+// });
+
+//create route
+// Route::post('/posts')
+
+// update
+// Route::put('/posts/{id}')
+
+// delete
+// Route::delete('/posts/{id}')
+
+// Better to create a controller to handle these logic
+// php artisan make:controller PostsController --api
+
+// Route::get('/posts', [PostsController::class, 'index']);
+// Route::get('/posts', [PostsController::class, 'store']);
+// Route::get('/posts', [PostsController::class, 'update']);
+// Route::get('/posts', [PostsController::class, 'destroy']);
+Route::resource('/posts', PostsController::class);
+
+// to have multiple versions of the api, we can wrap everything inside of a route group
+// Route::prefix('v1')->group(function (){
+//     Route::resource('/posts', PostsController::class);
+// });
 
 // CRUD
 /* 
