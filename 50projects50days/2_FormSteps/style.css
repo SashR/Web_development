@@ -1,0 +1,77 @@
+body {
+  background-color: rgb(37, 36, 36);
+  color: rgb(148, 20, 20);
+  box-sizing: border-box;
+}
+
+.container {
+  width: 40%;
+  background-color: darksalmon;
+  height: 30vh;
+  margin: auto;
+  position: relative;
+  top: 250px;
+  border: 1px solid black;
+  border-radius: 15px 15px;
+}
+
+.stepsHolder {
+  display: flex;
+  justify-content: space-evenly;
+  height: 10vh;
+  align-content: center;
+}
+
+.step {
+  width: 12%;
+  font-size: 30px;
+  border: 1px solid white;
+  border-radius: 10px 10px;
+  text-align: center;
+  padding-top: 15px;
+  background-color: rgb(206, 206, 206);
+  color: black;
+}
+
+.activeStep {
+  background-color: rgb(37, 115, 216);
+  color: white;
+  /* transform: scale(1.05); */
+}
+
+.spacer {
+  width: 100%;
+  height: 5vh;
+}
+
+.buttonsHolder {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.shift {
+  width: 20%;
+  height: 5vh;
+  background-color: greenyellow;
+  color: grey;
+  border-radius: 10px 10px;
+  transition: 1s ease-in-out;
+}
+
+.stepLine {
+  background-color: white;
+  height: 0.8vh;
+  width: 17%;
+  align-self: center;
+}
+
+.deactiveBtn {
+  background-color: rgb(190, 190, 190);
+  color: rgb(97, 97, 97);
+}
+
+.shift:hover {
+  transform: scale(1.1);
+  transform: translateY(-8px);
+  box-shadow: 0px 3px 2px 3px rgb(56, 50, 50);
+}
