@@ -67,10 +67,15 @@ Route::resource('/posts', PostsController::class);
 // php artisan make:model modelName --migration
 
 
-Route::get('/test', function(){
-    return ['test' => 'Api works'];
-});
+// Route::get('/test', function(){
+//     return ['test' => 'Api works'];
+// });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+// **************************************************************************
+// great command for creating a model, migration, controller and setting it to api type
+// php artisan make:model Dog --migration --controller --api
