@@ -26,6 +26,17 @@ use Illuminate\Support\Facades\Route;
     5. delete (DELETE)      /api/posts/{ids}
 */
 
+/*  To a create a resource (posts) in laravel
+    1. Create the database and migration
+    2. Create a model (tables in db)
+    2.5. Create a service? N/A Eloquent ORM handles this
+    3. Create controller to go get info from the DB
+    4. Return that info
+ */
+
+// php artisan make:model modelName --migration
+
+
 Route::get('/test', function(){
     return ['test' => 'Api works'];
 });
