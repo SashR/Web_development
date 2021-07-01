@@ -19,13 +19,51 @@ const tableData = [
 ];
 
 let currentDate = [];
+let fetchedData = {};
+let destrkData = {};
 
 let rowCount = 0;
+
+function convOtoA(obj) {
+  return Object.values(obj);
+}
+
+function genTable(obj) {
+  let row = convOtoA(obj);
+  const output = row.filter((item) => convOtoA(item));
+  return output;
+}
+
+function destrukt(obj) {
+  const output = {};
+  output["id"] = obj["id"];
+  output["ticket-no"] = obj["ticket-no"];
+  output["asset_id"] = obj["asset_id"];
+  output["location"] = obj["location"];
+  output["type"] = obj["type"];
+  output["updated_at"] = obj["updated_at"];
+  output["serial_no"] = obj["serial_no"];
+  return output;
+}
 
 function onLoad() {
   resetTable();
   loadout(tableData);
   currentData = tableData;
+  fetch("http://127.0.0.1:8000/api/assets")
+    .then((res) => {
+      console.log("response waiting for body: ", res);
+      return res.json();
+    })
+    .then((data) => {
+      fetchedData = data;
+      destrkData = Object.keys(fetchedData).map((item) =>
+        destrukt(fetchedData[0])
+      );
+    })
+    .catch((err) => {
+      console.log("error: ", err);
+    });
 }
 
 function loadout(dataArr) {
