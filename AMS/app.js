@@ -43,16 +43,16 @@ function resetTable() {
   }
 }
 
-function onSearch() {
+function onFilter() {
   let searchfield = document.querySelector("#searchfield");
-  let searchData = search(searchfield.value);
+  let searchData = filter(searchfield.value);
   resetTable();
   loadout(searchData);
   currentData = searchData;
   searchfield.value = "";
 }
 
-function search(str) {
+function filter(str) {
   let output = [];
   for (let i = 0; i < currentData.length; i++) {
     for (let j = 0; j < currentData[i].length; j++) {
@@ -65,7 +65,6 @@ function search(str) {
 }
 
 function createTR(rowID, rowData) {
-  console.log("tr...");
   let tr = document.createElement("tr");
   tr.setAttribute("id", "row" + rowID);
   for (let i = 0; i < rowData.length + 1; i++) {
