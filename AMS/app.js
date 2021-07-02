@@ -94,27 +94,57 @@ function destrukt(obj) {
   return output;
 }
 
-function getALL() {
-  fetch("http://127.0.0.1:8000/api/assets")
-    .then((res) => {
-      console.log("response waiting for body: ", res);
-      return res.json();
-    })
-    .then((data) => {
-      fetchedData = data;
-      displayData = mapData(fetchedData);
-      loadout(displayData);
-      currentData = displayData;
-    })
-    .catch((err) => {
-      console.log("error: ", err);
-    });
-}
+// Request to get all date in the database, and then display it
+// function getALL() {
+//   fetch("http://127.0.0.1:8000/api/assets")
+//     .then((res) => {
+//       console.log("response waiting for body: ", res);
+//       return res.json();
+//     })
+//     .then((data) => {
+//       fetchedData = data;
+//       displayData = mapData(fetchedData);
+//       loadout(displayData);
+//       currentData = displayData;
+//     })
+//     .catch((err) => {
+//       console.log("error: ", err);
+//     });
+// }
+
+const getAsync = async () => {
+  try {
+    const res = await fetch("http://127.0.0.1:8000/api/assets");
+    const data = await res.json();
+    console.log(data);
+    displayData = mapData(data);
+    loadout(displayData);
+    currentData = displayData;
+  } catch (err) {
+    console.log("danger: ", err);
+  }
+};
 
 function onLoad() {
   resetTable();
-  getALL();
+  //getALL();
+  getAsync();
 }
+// *******************************************************
+
+/**********Add asset to database******** */
+/*
+http://127.0.0.1:8000/api/assets?asset_id=11234&serial_no
+=FXY3210&ticket-no=12&type=monitor
+*/
+/*****************************************************/
+
+/*****************Validate Asset in Database******************* */
+/*
+http://127.0.0.1:8000/api/assets/3?asset_id=11226&
+serial_no=dsfss234&ticket-no=15&location=Delta Towers 26 BayE12
+*/
+/************************************************************** */
 
 function loadout(dataArr) {
   let tablebody = document.querySelector("#tableBody");
