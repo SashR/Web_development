@@ -1,23 +1,71 @@
-const tableData = [
-  ["11111", "bxt12341", "Delta Towers 24 Bay5", "23 June", "123", "Desktop"],
-  ["11112", "rjs1245d", "Delta Towers 26 Bay5", "12 June", "124", "Laptop"],
-  ["11113", "zsd23456", "Musgrave 1 Bay5", "01 April", "125", "Chair"],
-  ["11114", "zsd2sf51", "Musgrave 1 Bay3", "01 January", "126", "Monitor"],
-  ["11115", "zsdsfsfs3", "Musgrave 1 Bay2", "07 March", "127", "Desktop"],
-  ["11116", "zxvfd431", "Delta Towers 24 Bay5", "04 April", "128", "Desktop"],
-  ["11117", "sdsf97543", "Delta Towers 24 Bay3", "12 June", "129", "Monitor"],
-  ["11118", "zsdsfs234", "Musgrave 1 Bay5", "21 June", "130", "Monitor"],
-  ["11119", "zsd23532", "Delta Towers 25 Bay8", "13 June", "131", "Desktop"],
-  [
-    "11120",
-    "sdf234623",
-    "Delta Towers 26 Bay3",
-    "10 February",
-    "132",
-    "Coffee Machine",
-  ],
-];
+// const tableData = [
+//   ["11111", "bxt12341", "Delta Towers 24 Bay5", "23 June", "123", "Desktop"],
+//   ["11112", "rjs1245d", "Delta Towers 26 Bay5", "12 June", "124", "Laptop"],
+//   ["11113", "zsd23456", "Musgrave 1 Bay5", "01 April", "125", "Chair"],
+//   ["11114", "zsd2sf51", "Musgrave 1 Bay3", "01 January", "126", "Monitor"],
+//   ["11115", "zsdsfsfs3", "Musgrave 1 Bay2", "07 March", "127", "Desktop"],
+//   ["11116", "zxvfd431", "Delta Towers 24 Bay5", "04 April", "128", "Desktop"],
+//   ["11117", "sdsf97543", "Delta Towers 24 Bay3", "12 June", "129", "Monitor"],
+//   ["11118", "zsdsfs234", "Musgrave 1 Bay5", "21 June", "130", "Monitor"],
+//   ["11119", "zsd23532", "Delta Towers 25 Bay8", "13 June", "131", "Desktop"],
+//   [
+//     "11120",
+//     "sdf234623",
+//     "Delta Towers 26 Bay3",
+//     "10 February",
+//     "132",
+//     "Coffee Machine",
+//   ],
+// ];
 
+const mapKeys = {
+  id: 0,
+  "ticket-no": 5,
+  asset_id: 1,
+  location: 3,
+  type: 6,
+  updated_at: 4,
+  serial_no: 2,
+};
+
+const tabData = {
+  0: {
+    asset_id: "11111",
+    serial_no: "bxt12341",
+    location: "Delta Towers 24 Bay5",
+    updated_at: "23 June",
+    "ticket-no": "123",
+    type: "Desktop",
+    id: 1,
+  },
+  1: {
+    asset_id: "11112",
+    serial_no: "rjs1245d",
+    location: "Delta Towers 26 Bay5",
+    updated_at: "12 June",
+    "ticket-no": "124",
+    type: "Laptop",
+    id: 2,
+  },
+};
+
+let tableData = mapData(tabData);
+
+function mapData(obj) {
+  let keys = Object.keys(obj);
+  let mapKys = Object.keys(mapKeys);
+  let output = [];
+  for (let i = 0; i < keys.length; i++) {
+    let row = [];
+    for (let j = 0; j < mapKys.length; j++) {
+      row[mapKeys[mapKys[j]]] = obj[keys[i]][mapKys[j]];
+    }
+    output.push(row);
+  }
+  return output;
+}
+
+let displayData = [];
 let currentDate = [];
 let fetchedData = {};
 let destrkData = {};
@@ -46,10 +94,7 @@ function destrukt(obj) {
   return output;
 }
 
-function onLoad() {
-  resetTable();
-  loadout(tableData);
-  currentData = tableData;
+function getALL() {
   fetch("http://127.0.0.1:8000/api/assets")
     .then((res) => {
       console.log("response waiting for body: ", res);
@@ -57,13 +102,18 @@ function onLoad() {
     })
     .then((data) => {
       fetchedData = data;
-      destrkData = Object.keys(fetchedData).map((item) =>
-        destrukt(fetchedData[0])
-      );
+      displayData = mapData(fetchedData);
+      loadout(displayData);
+      currentData = displayData;
     })
     .catch((err) => {
       console.log("error: ", err);
     });
+}
+
+function onLoad() {
+  resetTable();
+  getALL();
 }
 
 function loadout(dataArr) {
@@ -105,7 +155,7 @@ function filter(str) {
 function createTR(rowID, rowData) {
   let tr = document.createElement("tr");
   tr.setAttribute("id", "row" + rowID);
-  for (let i = 0; i < rowData.length + 1; i++) {
+  for (let i = 1; i < rowData.length + 1; i++) {
     let btn = i === rowData.length;
     let inner = i === rowData.length ? createValidateBtn(rowID) : rowData[i];
     let td = createTD(inner, rowID, btn, i);
@@ -131,3 +181,5 @@ function createValidateBtn(rowid) {
   button.innerHTML = "Validate";
   return button;
 }
+
+//
