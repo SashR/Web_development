@@ -122,12 +122,13 @@ const getAsync = async () => {
     currentData = displayData;
     loadout(currentData);
   } catch (err) {
-    console.log("danger: ", err);
+    errorHandler("Error on Loading");
   }
 };
 
 function onLoad() {
   resetTable();
+  errorHandler("", true);
   //getALL();
   getAsync();
 }
@@ -142,8 +143,13 @@ http://127.0.0.1:8000/api/assets?asset_id=11234&serial_no
 async function addCall() {
   let newAsset = addObject();
   //console.log(newAsset);
-  const res = await axios.post("http://127.0.0.1:8000/api/assets", newAsset);
-  console.log(res);
+  try {
+    const res = await axios.post("http://127.0.0.1:8000/api/assets", newAsset);
+    console.log(res);
+  } catch (err) {
+    errorHandler("Duplicate Data Detected");
+    console.log(err);
+  }
 }
 
 function addObject() {
@@ -163,19 +169,35 @@ function addObject() {
 http://127.0.0.1:8000/api/assets/3?asset_id=11226&
 serial_no=dsfss234&ticket-no=15&location=Delta Towers 26 BayE12
 */
-let newLoc = "";
 async function validateAsset() {
-  console.log(validateID + 1);
-  let targetID = validateID + 1;
-  let validateObj = fetchedData[validateID];
-  validateObj["location"] = document.getElementById("validateLoc").value;
-  console.log(validateObj);
-  const res = await axios.put(
-    `http://127.0.0.1:8000/api/assets/${targetID}`,
-    validateObj
-  );
+  try {
+    console.log(validateID + 1);
+    let targetID = validateID + 1;
+    let validateObj = fetchedData[validateID];
+    validateObj["location"] = document.getElementById("validateLoc").value;
+    console.log(validateObj);
+    const res = await axios.put(
+      `http://127.0.0.1:8000/api/assets/${targetID}`,
+      validateObj
+    );
+  } catch (err) {
+    errorHandler("Issue Detected");
+  }
 }
 /************************************************************** */
+
+/*******************Error Handler***************** */
+
+function errorHandler(err, reset = false) {
+  let alertMes = document.querySelector("#alert");
+  alertMes.setAttribute("class", "alert alert-danger");
+  reset
+    ? alertMes.setAttribute("class", "")
+    : alertMes.setAttribute("class", "alert alert-danger");
+  reset ? (alertMes.innerHTML = "") : (alertMes.innerHTML = err);
+}
+
+/********************************************** */
 
 function loadout(dataArr) {
   let tablebody = document.querySelector("#tableBody");
@@ -209,8 +231,6 @@ function filter(str) {
       if (checkStr.indexOf(str) !== -1) {
         output.push(displayData[i]);
       }
-
-      // console.log(checkStr.indexOf(str));
     }
   }
   return output;
