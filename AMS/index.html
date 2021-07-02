@@ -12,6 +12,7 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
   <body class="bg-dark">
     <div class="container text-center">
@@ -19,6 +20,7 @@
         <h1 class="display-1 text-primary">Capability BPO</h1>
         <div class="display-4 text-warning">Asset Management System</div>
       </header>
+
       <main>
         <div class="row mt-3 mb-3">
           <div class="col-2 mb-2">
@@ -27,7 +29,13 @@
             </button>
           </div>
           <div class="col-2 mb-2">
-            <button class="btn btn-primary btn-block">Add</button>
+            <button
+              class="btn btn-primary btn-block"
+              data-toggle="modal"
+              data-target="#myModal"
+            >
+              Add
+            </button>
           </div>
           <div class="col-2 mb-1">
             <button class="btn btn-primary btn-block" onclick="onFilter()">
@@ -40,6 +48,115 @@
             </div>
           </div>
         </div>
+
+        <div
+          class="modal fade"
+          id="myModal"
+          data-backdrop="static"
+          data-keyboard="false"
+          tabindex="-1"
+          aria-labelledby="staticBackdropLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Add Asset</h5>
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body form-row">
+                <div class="form-group col-6">
+                  <label for="asset_idAdd">Asset_id:</label>
+                  <input type="text" id="asset_idAdd" class="form-control-sm" />
+                </div>
+                <div class="form-group col-6">
+                  <label for="serial_noAdd">Serial_no:</label>
+                  <input
+                    type="text"
+                    id="serial_noAdd"
+                    class="form-control-sm"
+                  />
+                </div>
+                <div class="form-group col-6">
+                  <label for="ticket-noAdd">Ticket_no:</label>
+                  <input
+                    type="text"
+                    id="ticket-noAdd"
+                    class="form-control-sm"
+                  />
+                </div>
+                <div class="form-group col-6">
+                  <label for="typeAdd">Description:</label>
+                  <input type="text" id="typeAdd" class="form-control-sm" />
+                </div>
+                <div class="form-group col-6">
+                  <label for="locationAdd">Location:</label>
+                  <input type="text" id="locationAdd" class="form-control-sm" />
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  onclick="addCall()"
+                  data-dismiss="modal"
+                >
+                  ADD
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="modal fade"
+          id="validateModal"
+          data-backdrop="static"
+          data-keyboard="false"
+          tabindex="-1"
+          aria-labelledby="staticBackdropLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Validate</h5>
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body form-row">
+                <div class="form-group">
+                  <label for="validateLoc">Location</label>
+                  <input id="validateLoc" type="text" class="form-control-sm" />
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button
+                  data-dismiss="modal"
+                  type="button"
+                  class="btn btn-primary"
+                  onclick="validateAsset()"
+                >
+                  Validate
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <table class="table text-light">
           <thead>
             <tr>

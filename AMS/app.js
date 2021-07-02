@@ -117,9 +117,10 @@ const getAsync = async () => {
     const res = await fetch("http://127.0.0.1:8000/api/assets");
     const data = await res.json();
     console.log(data);
+    fetchedData = data;
     displayData = mapData(data);
-    loadout(displayData);
     currentData = displayData;
+    loadout(currentData);
   } catch (err) {
     console.log("danger: ", err);
   }
@@ -137,6 +138,24 @@ function onLoad() {
 http://127.0.0.1:8000/api/assets?asset_id=11234&serial_no
 =FXY3210&ticket-no=12&type=monitor
 */
+
+async function addCall() {
+  let newAsset = addObject();
+  //console.log(newAsset);
+  const res = await axios.post("http://127.0.0.1:8000/api/assets", newAsset);
+  console.log(res);
+}
+
+function addObject() {
+  return {
+    serial_no: document.getElementById("serial_noAdd").value,
+    asset_id: document.getElementById("asset_idAdd").value,
+    "ticket-no": document.getElementById("ticket-noAdd").value,
+    location: document.getElementById("locationAdd").value,
+    type: document.getElementById("typeAdd").value,
+  };
+}
+
 /*****************************************************/
 
 /*****************Validate Asset in Database******************* */
@@ -144,6 +163,18 @@ http://127.0.0.1:8000/api/assets?asset_id=11234&serial_no
 http://127.0.0.1:8000/api/assets/3?asset_id=11226&
 serial_no=dsfss234&ticket-no=15&location=Delta Towers 26 BayE12
 */
+let newLoc = "";
+async function validateAsset() {
+  console.log(validateID + 1);
+  let targetID = validateID + 1;
+  let validateObj = fetchedData[validateID];
+  validateObj["location"] = document.getElementById("validateLoc").value;
+  console.log(validateObj);
+  const res = await axios.put(
+    `http://127.0.0.1:8000/api/assets/${targetID}`,
+    validateObj
+  );
+}
 /************************************************************** */
 
 function loadout(dataArr) {
@@ -174,9 +205,12 @@ function filter(str) {
   let output = [];
   for (let i = 0; i < currentData.length; i++) {
     for (let j = 0; j < currentData[i].length; j++) {
-      if (currentData[i][j].indexOf(str) !== -1) {
-        output.push(currentData[i]);
+      let checkStr = currentData[i][j].toString();
+      if (checkStr.indexOf(str) !== -1) {
+        output.push(displayData[i]);
       }
+
+      // console.log(checkStr.indexOf(str));
     }
   }
   return output;
@@ -205,11 +239,20 @@ function createTD(inner, rowID, btn, colID) {
   return td;
 }
 
+let validateID = 0;
+
 function createValidateBtn(rowid) {
   let button = document.createElement("button");
   button.setAttribute("class", "btn btn-secondary");
+  button.setAttribute("onclick", `setValidID(${rowid})`);
+  button.setAttribute("data-target", "#validateModal");
+  button.setAttribute("data-toggle", "modal");
   button.innerHTML = "Validate";
   return button;
+}
+
+function setValidID(id) {
+  validateID = id;
 }
 
 //
