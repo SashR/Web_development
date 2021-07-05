@@ -53,11 +53,11 @@ class AssetListController extends Controller
      * @param  \App\Models\AssetList  $assetList
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, AssetList $assetList, $id)
+    public function update(Request $request, $id)
     {
         //update an asset
         $asset = AssetList::find($id);
-        $asset->update($request->all());
+        $asset->update($request->only('location'));
         return $asset; 
     }
 

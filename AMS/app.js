@@ -145,6 +145,7 @@ async function addCall() {
   //console.log(newAsset);
   try {
     const res = await axios.post("http://127.0.0.1:8000/api/assets", newAsset);
+    onLoad();
     console.log(res);
   } catch (err) {
     errorHandler("Duplicate Data Detected");
@@ -172,7 +173,7 @@ serial_no=dsfss234&ticket-no=15&location=Delta Towers 26 BayE12
 async function validateAsset() {
   try {
     console.log(validateID + 1);
-    let targetID = validateID + 1;
+    let targetID = validateID + 2;
     let validateObj = fetchedData[validateID];
     validateObj["location"] = document.getElementById("validateLoc").value;
     console.log(validateObj);
@@ -180,6 +181,7 @@ async function validateAsset() {
       `http://127.0.0.1:8000/api/assets/${targetID}`,
       validateObj
     );
+    // onLoad();
   } catch (err) {
     errorHandler("Issue Detected");
   }
@@ -217,10 +219,12 @@ function resetTable() {
 function onFilter() {
   let searchfield = document.querySelector("#searchfield");
   let searchData = filter(searchfield.value);
-  resetTable();
-  loadout(searchData);
-  currentData = searchData;
-  searchfield.value = "";
+  if (searchfield.value !== "") {
+    resetTable();
+    loadout(searchData);
+    currentData = searchData;
+    searchfield.value = "";
+  }
 }
 
 function filter(str) {
