@@ -1,23 +1,3 @@
-// const tableData = [
-//   ["11111", "bxt12341", "Delta Towers 24 Bay5", "23 June", "123", "Desktop"],
-//   ["11112", "rjs1245d", "Delta Towers 26 Bay5", "12 June", "124", "Laptop"],
-//   ["11113", "zsd23456", "Musgrave 1 Bay5", "01 April", "125", "Chair"],
-//   ["11114", "zsd2sf51", "Musgrave 1 Bay3", "01 January", "126", "Monitor"],
-//   ["11115", "zsdsfsfs3", "Musgrave 1 Bay2", "07 March", "127", "Desktop"],
-//   ["11116", "zxvfd431", "Delta Towers 24 Bay5", "04 April", "128", "Desktop"],
-//   ["11117", "sdsf97543", "Delta Towers 24 Bay3", "12 June", "129", "Monitor"],
-//   ["11118", "zsdsfs234", "Musgrave 1 Bay5", "21 June", "130", "Monitor"],
-//   ["11119", "zsd23532", "Delta Towers 25 Bay8", "13 June", "131", "Desktop"],
-//   [
-//     "11120",
-//     "sdf234623",
-//     "Delta Towers 26 Bay3",
-//     "10 February",
-//     "132",
-//     "Coffee Machine",
-//   ],
-// ];
-
 const mapKeys = {
   id: 0,
   "ticket-no": 5,
@@ -26,30 +6,10 @@ const mapKeys = {
   type: 6,
   updated_at: 4,
   serial_no: 2,
+  status: 7,
+  details: 8,
+  site: 9,
 };
-
-const tabData = {
-  0: {
-    asset_id: "11111",
-    serial_no: "bxt12341",
-    location: "Delta Towers 24 Bay5",
-    updated_at: "23 June",
-    "ticket-no": "123",
-    type: "Desktop",
-    id: 1,
-  },
-  1: {
-    asset_id: "11112",
-    serial_no: "rjs1245d",
-    location: "Delta Towers 26 Bay5",
-    updated_at: "12 June",
-    "ticket-no": "124",
-    type: "Laptop",
-    id: 2,
-  },
-};
-
-let tableData = mapData(tabData);
 
 function mapData(obj) {
   let keys = Object.keys(obj);
@@ -74,24 +34,6 @@ let rowCount = 0;
 
 function convOtoA(obj) {
   return Object.values(obj);
-}
-
-function genTable(obj) {
-  let row = convOtoA(obj);
-  const output = row.filter((item) => convOtoA(item));
-  return output;
-}
-
-function destrukt(obj) {
-  const output = {};
-  output["id"] = obj["id"];
-  output["ticket-no"] = obj["ticket-no"];
-  output["asset_id"] = obj["asset_id"];
-  output["location"] = obj["location"];
-  output["type"] = obj["type"];
-  output["updated_at"] = obj["updated_at"];
-  output["serial_no"] = obj["serial_no"];
-  return output;
 }
 
 // Request to get all date in the database, and then display it
@@ -126,6 +68,21 @@ const getAsync = async () => {
   }
 };
 
+function loadout(dataArr) {
+  let tablebody = document.querySelector("#tableBody");
+  for (let i = 0; i < dataArr.length; i++) {
+    let tr = createTR(i, dataArr[i]);
+    tablebody.appendChild(tr);
+  }
+}
+
+function resetTable() {
+  let tbody = document.querySelector("#tableBody");
+  while (tbody.hasChildNodes()) {
+    tbody.removeChild(tbody.firstChild);
+  }
+}
+
 function onLoad() {
   resetTable();
   errorHandler("", true);
@@ -142,15 +99,30 @@ http://127.0.0.1:8000/api/assets?asset_id=11234&serial_no
 
 async function addCall() {
   let newAsset = addObject();
-  //console.log(newAsset);
+  let newID = document.getElementById("asset_idAdd").value;
+  let newSN = document.getElementById("serial_noAdd").value;
+  let newTkt = document.getElementById("ticket-noAdd").value;
+  function duplicateDetect(value) {
+    return displayData.every((item) => item.indexOf(value) === -1);
+  }
+
+  console.log(newAsset);
   try {
+    if (!duplicateDetect(newID)) {
+      throw "duplicate ID value";
+    } else if (!duplicateDetect(newSN)) {
+      throw "duplicate serial number";
+    } else if (!duplicateDetect(newTkt)) {
+      throw "duplicate ticket number";
+    }
     const res = await axios.post("http://127.0.0.1:8000/api/assets", newAsset);
     onLoad();
     console.log(res);
   } catch (err) {
-    errorHandler("Duplicate Data Detected");
+    errorHandler(err);
     console.log(err);
   }
+  // console.log(addObject());
 }
 
 function addObject() {
@@ -160,6 +132,11 @@ function addObject() {
     "ticket-no": document.getElementById("ticket-noAdd").value,
     location: document.getElementById("locationAdd").value,
     type: document.getElementById("typeAdd").value,
+    status: document.getElementById("statusAdd").value,
+    supplier_price: document.getElementById("supplierPriceAdd").value,
+    financier: document.getElementById("financierAdd").value,
+    details: document.getElementById("detailsAdd").value,
+    site: document.getElementById("siteAdd").value,
   };
 }
 
@@ -173,7 +150,7 @@ serial_no=dsfss234&ticket-no=15&location=Delta Towers 26 BayE12
 async function validateAsset() {
   try {
     console.log(validateID + 1);
-    let targetID = validateID + 2;
+    let targetID = displayData[validateID][0];
     let validateObj = fetchedData[validateID];
     validateObj["location"] = document.getElementById("validateLoc").value;
     console.log(validateObj);
@@ -181,7 +158,7 @@ async function validateAsset() {
       `http://127.0.0.1:8000/api/assets/${targetID}`,
       validateObj
     );
-    // onLoad();
+    onLoad();
   } catch (err) {
     errorHandler("Issue Detected");
   }
@@ -201,21 +178,6 @@ function errorHandler(err, reset = false) {
 
 /********************************************** */
 
-function loadout(dataArr) {
-  let tablebody = document.querySelector("#tableBody");
-  for (let i = 0; i < dataArr.length; i++) {
-    let tr = createTR(i, dataArr[i]);
-    tablebody.appendChild(tr);
-  }
-}
-
-function resetTable() {
-  let tbody = document.querySelector("#tableBody");
-  while (tbody.hasChildNodes()) {
-    tbody.removeChild(tbody.firstChild);
-  }
-}
-
 function onFilter() {
   let searchfield = document.querySelector("#searchfield");
   let searchData = filter(searchfield.value);
@@ -229,16 +191,21 @@ function onFilter() {
 
 function filter(str) {
   let output = [];
+  let checkStr = "";
   for (let i = 0; i < currentData.length; i++) {
-    for (let j = 0; j < currentData[i].length; j++) {
-      let checkStr = currentData[i][j].toString();
-      if (checkStr.indexOf(str) !== -1) {
-        output.push(displayData[i]);
+    for (let j = 1; j < currentData[i].length; j++) {
+      checkStr = currentData[i][j];
+      if (checkStr !== null) {
+        if (checkStr.indexOf(str) !== -1) {
+          output.push(displayData[i]);
+        }
       }
     }
   }
   return output;
 }
+
+/************************************************* */
 
 function createTR(rowID, rowData) {
   let tr = document.createElement("tr");
@@ -265,10 +232,10 @@ function createTD(inner, rowID, btn, colID) {
 
 let validateID = 0;
 
-function createValidateBtn(rowid) {
+function createValidateBtn(rowID) {
   let button = document.createElement("button");
   button.setAttribute("class", "btn btn-secondary");
-  button.setAttribute("onclick", `setValidID(${rowid})`);
+  button.setAttribute("onclick", `setValidID(${rowID})`);
   button.setAttribute("data-target", "#validateModal");
   button.setAttribute("data-toggle", "modal");
   button.innerHTML = "Validate";
