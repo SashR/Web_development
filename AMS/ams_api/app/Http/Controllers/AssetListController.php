@@ -28,9 +28,9 @@ class AssetListController extends Controller
     {
         // add an asset
         $request->validate([
-            'asset_id' => 'required',
-            'serial_no' => 'required',
-            'ticket-no' => 'required',
+            'asset_id' => 'required|unique:asset_lists',
+            'serial_no' => 'required|unique:asset_lists',
+            'ticket-no' => 'required|unique:asset_lists',
         ]);
         return AssetList::create($request->all());
     }
@@ -57,7 +57,11 @@ class AssetListController extends Controller
     {
         //update an asset
         $asset = AssetList::find($id);
-        $asset->update($request->only('location'));
+        $asset->status=$request->status;
+        $asset->location=$request->location;
+        $asset->site=$request->site;
+        $asset->save();
+
         return $asset; 
     }
 

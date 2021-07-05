@@ -16,12 +16,17 @@ class CreateAssetListsTable extends Migration
         Schema::create('asset_lists', function (Blueprint $table) {
             $table->id();
 
-            $table->string('asset_id')->unique();
-            $table->string('serial_no')->unique();
-            $table->string('ticket-no')->unique();
+            $table->string('asset_id');
+            $table->string('serial_no');
+            $table->string('ticket-no');
             $table->string('validated_date')->nullable();
             $table->string('location')->nullable();
             $table->string('type')->nullable();
+            $table->string('status')->nullable();
+            $table->string('details')->nullable();
+            $table->string('financier')->nullable();
+            $table->string('site')->nullable();
+            $table->float('supplier_price')->nullable();
 
             $table->timestamps();
         });
