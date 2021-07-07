@@ -1,0 +1,19 @@
+.block {
+    width: 50vw;
+    border: 1px solid whitesmoke;
+    border-radius: 15px;
+}
+
+select {
+    width: 80%;
+}
+
+.cbpo-primary {
+    background-color: #071028;
+    color: whitesmoke;
+}
+
+.cbpo-secondary {
+    color: #071028;
+    background-color: whitesmoke;
+}
